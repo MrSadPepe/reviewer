@@ -1,10 +1,11 @@
 package dev.pepus.reviews.controller;
 
 import dev.pepus.reviews.model.Review;
-import dev.pepus.reviews.model.Roles;
+import dev.pepus.reviews.model.Role;
 import dev.pepus.reviews.model.User;
 import dev.pepus.reviews.repository.ContentRepository;
 import dev.pepus.reviews.repository.ReviewRepository;
+import dev.pepus.reviews.repository.RoleRepository;
 import dev.pepus.reviews.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,15 @@ public class UserController {
     private final UserRepository repository;
     private final ReviewRepository reviewRepository;
     private final ContentRepository contentRepository;
+    private final RoleRepository roleRepository;
     private final ReviewController controller;
 
     public UserController(UserRepository repository, ReviewRepository reviewRepository,
-                          ContentRepository contentRepository) {
+                          ContentRepository contentRepository, RoleRepository roleRepository) {
         this.repository = repository;
         this.reviewRepository = reviewRepository;
         this.contentRepository = contentRepository;
+        this.roleRepository = roleRepository;
         this.controller = new ReviewController(reviewRepository, contentRepository);
     }
 
@@ -82,6 +85,7 @@ public class UserController {
                     (String.valueOf(json.get("newPassword").hashCode())) : usr.getPassword();
             if (newPassword.equals(usr.getPassword())) throw new IllegalArgumentException("Wrong old password");
             usr.setPassword(newPassword);
+            usr.setRole(roleRepository.findById("0").get());
             repository.save(usr);
         }
         catch (IllegalArgumentException e) {
