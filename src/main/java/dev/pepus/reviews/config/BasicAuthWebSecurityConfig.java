@@ -28,6 +28,9 @@ import java.io.PrintWriter;
 public class BasicAuthWebSecurityConfig {
 
     @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
     private UserService userDetailsService;
 
     @Bean
@@ -47,30 +50,13 @@ public class BasicAuthWebSecurityConfig {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.csrf().disable().authorizeRequests().anyRequest().authenticated()
-                .and().httpBasic().authenticationEntryPoint(entryPoint())
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests().antMatchers("/authenticate").permitAll()
+                .anyRequest().authenticated();
+        http.apply(new JwtTokenConfigurer(tokenProvider));
         return http.build();
     }
 
 
-    @Bean
-    public AuthenticationEntryPoint entryPoint() {
-        return new BasicAuthenticationEntryPoint() {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response,
-                                 AuthenticationException authException) throws IOException {
-                response.addHeader("WWW-Authenticate", "Basic Realm - " + getRealmName());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                PrintWriter writer = response.getWriter();
-                writer.println("HTTP Status 401 - " + authException.getMessage());
-            }
-
-            @Override
-            public void afterPropertiesSet() {
-                setRealmName("Pepu5");
-                super.afterPropertiesSet();
-            }
-        };
-    }
 }
