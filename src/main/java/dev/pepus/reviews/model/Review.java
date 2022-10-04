@@ -3,6 +3,7 @@ package dev.pepus.reviews.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class Review {
     private Content content;
     private String username;
     private String contentName;
+    @NotNull
     private int rating;
     private String comment;
     private LocalDateTime creationDate;

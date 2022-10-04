@@ -1,11 +1,13 @@
 package dev.pepus.reviews.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
@@ -15,14 +17,16 @@ public class User implements UserDetails {
     @Id
     private String id;
     @Column(unique = true)
+    @NotNull
     private String username;
+    @NotNull
     private String password;
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Review> reviews = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "role_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Role role;
 
     public User(String username, String password) {

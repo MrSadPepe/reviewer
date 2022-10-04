@@ -1,6 +1,6 @@
 package dev.pepus.reviews.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -15,6 +15,7 @@ public class Role implements GrantedAuthority {
     private String name;
     @Transient
     @OneToMany(mappedBy = "roles")
+    @JsonManagedReference
     private List<User> users;
     public Role() {
     }

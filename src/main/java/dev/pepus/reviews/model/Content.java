@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class Content {
     @Id
     private String id;
     @Column(unique = true)
+    @NotNull
     private String contentName;
     private float averageRating;
     @OneToMany(mappedBy = "content")
