@@ -52,8 +52,7 @@ public class BasicAuthWebSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers("/authenticate").permitAll()
-                .anyRequest().authenticated();
+                .and().authorizeRequests().antMatchers("/authenticate").permitAll();
         http.apply(new JwtTokenConfigurer(tokenProvider));
         return http.build();
     }

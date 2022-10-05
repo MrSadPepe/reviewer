@@ -33,7 +33,7 @@ public class AdminController {
         return userService.findAll();
     }
 
-    @PostMapping("/users/{id}")
+    @PutMapping("/users/{id}")
     public void updateUser(@RequestBody Map<String, String> json, @PathVariable String id){
         User user = userRepository.findById(id).get();
         if (json.get("password") != null){

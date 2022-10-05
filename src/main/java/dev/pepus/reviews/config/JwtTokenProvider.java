@@ -27,7 +27,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    private long validityInMilliseconds = 60000;
+    private long validityInMilliseconds = 10 * 60 * 1000;
 
     public String createToken(String username, Role role) {
         Claims claims = Jwts.claims().setSubject(username);
